@@ -1,3 +1,4 @@
+import introImg from "../../../../assets/intro-img.png";
 import { IntroContainer, IntroContent } from "./styles";
 
 export function Intro (){
@@ -5,8 +6,9 @@ export function Intro (){
     <IntroContainer>
       <IntroContent className="container">
         <div>
-          <p>Intro oi</p>
+          <section></section>
         </div>
+        <img src={introImg} alt="" />
       </IntroContent>
     </IntroContainer>
   )

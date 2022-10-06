@@ -1,6 +1,7 @@
 import { rgba } from "polished";
 import styled from "styled-components";
 import introBackgroundImg from "../../../../assets/Background.png";
+import { TitleText } from "../../../../components/Typography";
 
 export const IntroContainer = styled.section`
   width: 100%;
@@ -14,6 +15,10 @@ export const IntroContainer = styled.section`
         ${theme.colors["base-background"]} 100%
       )`};
   background-size: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `; 
 
 
@@ -23,4 +28,8 @@ export const IntroContent = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 3.5rem;
+`
+
+export const IntroTitle = styled(TitleText)`
+  margin-bottom: 1rem;
 `

@@ -1,12 +1,20 @@
 import introImg from "../../../../assets/intro-img.png";
-import { IntroContainer, IntroContent } from "./styles";
+import { RegularText } from "../../../../components/Typography";
+import { IntroContainer, IntroContent, IntroTitle } from "./styles";
 
-export function Intro (){
+export function Intro() {
   return (
     <IntroContainer>
       <IntroContent className="container">
         <div>
-          <section></section>
+          <section>
+            <IntroTitle size="xl" >
+              Encontre o café perfeito para qualquer hora do dia
+            </IntroTitle>
+            <RegularText size="l" color="subtitle" as='h3'>
+              Com o Coffee Delivery você recebe seu café onde estiver, a qualquer hora
+            </RegularText>
+          </section>
         </div>
         <img src={introImg} alt="" />
       </IntroContent>

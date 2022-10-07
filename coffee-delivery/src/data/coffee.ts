@@ -72,7 +72,7 @@ export const coffees = [
     name: "Mocaccino",
     description: "Café expresso com calda de chocolate, pouco leite e espuma",
     photo: "mocaccino.png",
-    price: 9.9,
+    price: 19.9,
   },
   {
     id: 10,

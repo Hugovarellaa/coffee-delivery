@@ -47,7 +47,7 @@ export const GlobalStyles = createGlobalStyle`
   input[type="number"] {
     -moz-appearance: textfield;
   }
-/*   
+  
   ::-webkit-scrollbar {
     width: 0.4rem;
   }
@@ -57,5 +57,5 @@ export const GlobalStyles = createGlobalStyle`
   ::-webkit-scrollbar-thumb {
     border-radius: 2rem;
     background: ${({ theme }) => theme.colors["brand-purple"]}
-  } */
+  }
 `

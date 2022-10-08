@@ -10,6 +10,7 @@ interface CartContextProps {
   cartQuantity: number;
   cartItems: CartItem[];
   addCoffeeToCart: (coffee: CartItem) => void;
+  chageCartItemQuantity: (cartItemId: number, type: 'increase' | 'decrease') => void
 }
 
 interface CartContextProviderProps {
@@ -36,13 +37,23 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     setCartItems(newCart)
   }
 
-  console.log(cartItems)
+  function chageCartItemQuantity(cartItemId: number, type: 'increase' | 'decrease') {
+    const newCart = produce(cartItems, (draft) => {
+      const coffeeExistsInCart = cartItems.findIndex(cartItem => cartItem.id === cartItemId);
+      if (coffeeExistsInCart >= 0) {
+        const item = draft[coffeeExistsInCart];
+        draft[coffeeExistsInCart].quantity = type === 'increase' ? item.quantity + 1 : item.quantity - 1
+      }
+    })
+    setCartItems(newCart)
+  }
 
   return (
     <CartContext.Provider value={{
       cartQuantity,
       cartItems,
-      addCoffeeToCart
+      addCoffeeToCart,
+      chageCartItemQuantity
     }}>
       {children}
     </CartContext.Provider>

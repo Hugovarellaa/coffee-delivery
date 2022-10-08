@@ -1,31 +1,51 @@
 import { Trash } from "phosphor-react";
 import { QuantityInput } from "../../../../components/QuantityInput";
 import { RegularText } from "../../../../components/Typography";
+import { CartItem } from "../../../../context/CartContext";
+import { useCart } from "../../../../hooks/useCart";
+import { formatMoney } from "../../../../utils/formatMoney";
 import { ActionContainer, CoffeeCartCardContainer, RemoveButton } from "./styles";
 
-export function CoffeeCartCard() {
+interface CoffeeCartCardProps {
+  coffee: CartItem
+}
+
+export function CoffeeCartCard({ coffee }: CoffeeCartCardProps) {
+  const { chageCartItemQuantity } = useCart()
+  const coffeeTotal = coffee.price * coffee.quantity
+  const formattedPrice = formatMoney(coffeeTotal)
+
+
+  function handleIncrease() {
+    chageCartItemQuantity(coffee.id, 'increase')
+  }
+
+  function handleDecrease() {
+    chageCartItemQuantity(coffee.id, 'decrease')
+  }
+
   return (
     <CoffeeCartCardContainer>
       <div>
         <img
-          src="https://s3-alpha-sig.figma.com/img/55b1/f9ee/64600f98b2bae456b96fdc624c4b4f47?Expires=1665964800&Signature=Eu-RtupXCoVDj4jtAQUuU3d3QHm3oZlgEIZAj3SeOKdGYw2ZllBQjfV3S-7C9HBZkqqliW~qi1VJHIKINC8Hn1Ajpj76kYirHF60EiGpSUsbqLBkuwQIlWjIsy7AS9yxgThyh01ftrE10FBusbpiTpLvh13QWtZqisNZnDvOleonQjqhwB6~n8wQvADpp0v10a-ia8USNv-P2v8olm3BI-dWr97TrOkxFxZ2BwsMqUZhokCWgh1yahShZ9lgIb6FyEL8Iz-9nvRm05-zuAPAzey6yFHU8-3mSmdpbI8NjseUuhImf1pAVsKgHdaUH5B3kupWPUbCIfMlvRgODQSUtQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-          alt=""
+          src={`/coffees/${coffee.photo}`}
+          alt={`/coffees/${coffee.name}`}
         />
         <div>
           <RegularText color="subtitle">
-            Expresso Tradicional
+            {coffee.name}
           </RegularText>
           <ActionContainer>
-            <QuantityInput size='small'/>
+            <QuantityInput size='small' quantity={coffee.quantity} onIncrease={handleIncrease} onDecrease={handleDecrease} />
 
             <RemoveButton>
-              <Trash size={16}/>
+              <Trash size={16} />
               REMOVER
             </RemoveButton>
           </ActionContainer>
         </div>
       </div>
-      <p>R$ 9,90</p>
+      <p>R$ {formattedPrice}</p>
     </CoffeeCartCardContainer>
   )
 }

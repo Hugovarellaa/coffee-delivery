@@ -11,7 +11,7 @@ interface CoffeeCartCardProps {
 }
 
 export function CoffeeCartCard({ coffee }: CoffeeCartCardProps) {
-  const { chageCartItemQuantity } = useCart()
+  const { chageCartItemQuantity, removeCartItems } = useCart()
   const coffeeTotal = coffee.price * coffee.quantity
   const formattedPrice = formatMoney(coffeeTotal)
 
@@ -22,6 +22,10 @@ export function CoffeeCartCard({ coffee }: CoffeeCartCardProps) {
 
   function handleDecrease() {
     chageCartItemQuantity(coffee.id, 'decrease')
+  }
+
+  function handleRemove() {
+    removeCartItems(coffee.id)
   }
 
   return (
@@ -36,9 +40,14 @@ export function CoffeeCartCard({ coffee }: CoffeeCartCardProps) {
             {coffee.name}
           </RegularText>
           <ActionContainer>
-            <QuantityInput size='small' quantity={coffee.quantity} onIncrease={handleIncrease} onDecrease={handleDecrease} />
+            <QuantityInput
+              size='small'
+              quantity={coffee.quantity}
+              onIncrease={handleIncrease}
+              onDecrease={handleDecrease}
+            />
 
-            <RemoveButton>
+            <RemoveButton onClick={handleRemove}>
               <Trash size={16} />
               REMOVER
             </RemoveButton>

@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { Coffee } from "../pages/Home/components/CoffeeCard";
 
 export interface CartItem extends Coffee {
@@ -8,21 +8,37 @@ export interface CartItem extends Coffee {
 
 interface CartContextProps {
   cartQuantity: number;
+  cartItemsTotal: number;
   cartItems: CartItem[];
   addCoffeeToCart: (coffee: CartItem) => void;
   chageCartItemQuantity: (cartItemId: number, type: 'increase' | 'decrease') => void
+  removeCartItems: (cartItemId: number) => void
 }
 
 interface CartContextProviderProps {
   children: ReactNode
 }
 
+const COFFEE_ITEMS_STORAGE_KEY = "coffee-delivery:cart-items-1.0.0"
+
 export const CartContext = createContext({} as CartContextProps)
 
 
 export function CartContextProvider({ children }: CartContextProviderProps) {
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
+
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const storageCartItems = localStorage.getItem(COFFEE_ITEMS_STORAGE_KEY)
+    if (storageCartItems) {
+      return JSON.parse(storageCartItems)
+    }
+    return []
+  })
+
   const cartQuantity = cartItems.length
+
+  const cartItemsTotal = cartItems.reduce((total, cartItem) => {
+    return total + cartItem.price * cartItem.quantity
+  }, 0)
 
   function addCoffeeToCart(coffee: CartItem) {
     const coffeeAlreadyExistsInCart = cartItems.findIndex(cartItem => cartItem.id === coffee.id)
@@ -48,12 +64,29 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     setCartItems(newCart)
   }
 
+  function removeCartItems(cartItemId: number) {
+    const newCart = produce(cartItems, (draft) => {
+      const coffeeExistsInCart = cartItems.findIndex(cartItem => cartItem.id === cartItemId);
+
+      if (coffeeExistsInCart >= 0) {
+        draft.splice(coffeeExistsInCart, 1)
+      }
+    })
+    setCartItems(newCart)
+  }
+
+  useEffect(() => {
+    localStorage.setItem(COFFEE_ITEMS_STORAGE_KEY, JSON.stringify(cartItems))
+  }, [cartItems])
+
   return (
     <CartContext.Provider value={{
       cartQuantity,
+      cartItemsTotal,
       cartItems,
       addCoffeeToCart,
-      chageCartItemQuantity
+      chageCartItemQuantity,
+      removeCartItems
     }}>
       {children}
     </CartContext.Provider>
